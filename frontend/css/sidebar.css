@@ -1,0 +1,208 @@
+/* ==========================================
+   APP NAVIGATION LAYOUT
+   ========================================== */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* --- APP NAVBAR --- */
+.app-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--navbar-height);
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-brand {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.navbar-brand .highlight {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sidebar-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-username {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notification-btn {
+  position: relative;
+}
+
+.notification-btn .badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: var(--navbar-height);
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--navbar-height));
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 90;
+  transition: transform var(--transition-base), background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.sidebar-link .icon {
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-link:hover {
+  background: var(--bg-secondary);
+  color: var(--primary);
+}
+
+.sidebar-link.active {
+  background: rgba(108, 99, 255, 0.1);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 16px 0;
+}
+
+/* --- MAIN CONTENT AREA --- */
+.main-content {
+  margin-left: var(--sidebar-width);
+  margin-top: var(--navbar-height);
+  width: calc(100% - var(--sidebar-width));
+  min-height: calc(100vh - var(--navbar-height));
+  padding: 32px;
+  transition: margin var(--transition-base), width var(--transition-base);
+}
+
+/* --- SIDEBAR OVERLAY (MOBILE) --- */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(26, 26, 46, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 85;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN (MOBILE)
+   ========================================== */
+@media (max-width: 1024px) {
+  .navbar-center {
+    display: none; /* Hide global search bar on smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 24px 16px;
+  }
+  
+  .navbar-username {
+    display: none;
+  }
+}

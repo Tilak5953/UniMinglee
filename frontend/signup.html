@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'dark';
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-theme');
+      } else {
+        document.documentElement.classList.remove('light-theme');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create a UniMinglee account to find matches, join communities, and discover campus activities.">
+  <title>Sign Up | UniMinglee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <style>
+    .signup-card {
+      max-width: 600px;
+    }
+    .form-step {
+      display: none;
+    }
+    .form-step.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+    .steps-indicator {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    .steps-indicator::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border-color);
+      z-index: 1;
+    }
+    .indicator-node {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      z-index: 2;
+      transition: all var(--transition-base);
+    }
+    .indicator-node.active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 0 10px rgba(108, 99, 255, 0.4);
+    }
+    .indicator-node.completed {
+      border-color: var(--success);
+      background: var(--success);
+      color: white;
+    }
+    .tags-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tag-selectable {
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--border-color);
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: transparent;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+      user-select: none;
+    }
+    .tag-selectable:hover {
+      border-color: var(--primary-light);
+      color: var(--primary);
+      background: rgba(108, 99, 255, 0.04);
+    }
+    .tag-selectable.selected {
+      background: var(--gradient-primary);
+      color: white;
+      border-color: transparent;
+      box-shadow: var(--shadow-sm);
+    }
+    .step-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .personality-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .personality-card {
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+    .personality-card:hover {
+      border-color: var(--primary-light);
+      background: rgba(108, 99, 255, 0.02);
+    }
+    .personality-card.selected {
+      border-color: var(--primary);
+      background: rgba(108, 99, 255, 0.05);
+      box-shadow: 0 4px 12px rgba(108, 99, 255, 0.1);
+    }
+    .personality-emoji {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .personality-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .personality-desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Elements -->
+  <div class="blob blob-1" style="width: 250px; height: 250px; top: -50px; left: -50px; background: var(--primary-light); opacity: 0.3; filter: blur(50px); position: absolute; z-index: 1;"></div>
+  <div class="blob blob-2" style="width: 300px; height: 300px; bottom: -80px; right: -80px; background: var(--secondary-light); opacity: 0.3; filter: blur(50px); position: absolute; z-index: 1;"></div>
+
+  <div class="auth-container">
+    <div class="auth-card signup-card">
+      <div class="auth-logo">
+        <a href="index.html">Uni<span>Minglee</span></a>
+      </div>
+      
+      <!-- Steps Indicator -->
+      <div class="steps-indicator">
+        <div class="indicator-node active" data-step="1">1</div>
+        <div class="indicator-node" data-step="2">2</div>
+        <div class="indicator-node" data-step="3">3</div>
+      </div>
+
+      <form class="auth-form" id="signupForm" novalidate>
+        <!-- STEP 1: Account Credentials -->
+        <div class="form-step active" id="step1">
+          <div class="auth-header">
+            <h2 class="auth-title">Let's get started</h2>
+            <p class="auth-subtitle">Create your basic credential setup first</p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="name">Full Name</label>
+            <input type="text" id="name" class="form-input" placeholder="Aarav Roy" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Campus Email</label>
+            <input type="email" id="email" class="form-input" placeholder="aarav@iitd.ac.in" required>
+            <span style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; display: block;">Must use a college/university email domain.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div class="input-password-container">
+              <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+              <button type="button" class="password-toggle" id="passwordToggle">👁️</button>
+            </div>
+            <div class="strength-container" id="strengthContainer" style="display: none;">
+              <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+              <span class="strength-text" id="strengthText">Weak password</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Campus Details -->
+        <div class="form-step" id="step2">
+          <div class="auth-header">
+            <h2 class="auth-title">Tell us about your campus</h2>
+            <p class="auth-subtitle">Help other students locate you</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="university">University / Institute</label>
+            <select id="university" class="form-select form-input" required style="appearance: auto;">
+              <option value="">Select your University</option>
+              <option value="IIT Delhi">IIT Delhi (Indian Institute of Technology)</option>
+              <option value="BITS Pilani">BITS Pilani (Birla Institute of Technology and Science)</option>
+              <option value="NIT Trichy">NIT Trichy (National Institute of Technology)</option>
+              <option value="VIT Vellore">VIT Vellore (Vellore Institute of Technology)</option>
+              <option value="DTU Delhi">DTU Delhi (Delhi Technological University)</option>
+              <option value="SRM Chennai">SRM Chennai (SRM Institute of Science and Technology)</option>
+              <option value="RVCE Bangalore">RVCE Bangalore (RV College of Engineering)</option>
+              <option value="BML Munjal University">BML Munjal University</option>
+              <option value="Other">Other University</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="otherUniversityGroup" style="display: none; margin-top: 12px;">
+            <label class="form-label" for="otherUniversity">Specify University Name</label>
+            <input type="text" id="otherUniversity" class="form-input" placeholder="e.g. Stanford University">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="branch">Academic Branch / Course</label>
+            <input type="text" id="branch" class="form-input" placeholder="B.Tech Computer Science" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="year">Year of Study</label>
+            <select id="year" class="form-select form-input" required style="appearance: auto;">
+              <option value="">Select Year</option>
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+              <option value="5th Year">5th Year (Dual/Integrated)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- STEP 3: Identity & Passions -->
+        <div class="form-step" id="step3">
+          <div class="auth-header">
+            <h2 class="auth-title">How do you mingle?</h2>
+            <p class="auth-subtitle">Set up your personality alignment and select interests</p>
+          </div>
+
+          <!-- Personality Selector -->
+          <div class="form-group">
+            <label class="form-label">Personality Type</label>
+            <div class="personality-selector">
+              <div class="personality-card selected" data-type="introvert">
+                <span class="personality-emoji">🌙</span>
+                <div class="personality-title">Introvert</div>
+                <div class="personality-desc">Cozy, low-key, small groups.</div>
+              </div>
+              <div class="personality-card" data-type="ambivert">
+                <span class="personality-emoji">⚡</span>
+                <div class="personality-title">Ambivert</div>
+                <div class="personality-desc">Balanced, flexible settings.</div>
+              </div>
+              <div class="personality-card" data-type="extrovert">
+                <span class="personality-emoji">☀️</span>
+                <div class="personality-title">Extrovert</div>
+                <div class="personality-desc">Energetic, large crowds.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interests Tag Cloud -->
+          <div class="form-group">
+            <label class="form-label">Interests (Select 3 or more)</label>
+            <div class="tags-grid" id="interestsContainer">
+              <div class="tag-selectable" data-val="Coding">💻 Coding</div>
+              <div class="tag-selectable" data-val="Music">🎵 Music</div>
+              <div class="tag-selectable" data-val="Photography">📸 Photography</div>
+              <div class="tag-selectable" data-val="Anime">🎌 Anime</div>
+              <div class="tag-selectable" data-val="Gaming">🎮 Gaming</div>
+              <div class="tag-selectable" data-val="Art">🎨 Art</div>
+              <div class="tag-selectable" data-val="Literature">📚 Books</div>
+              <div class="tag-selectable" data-val="Science">🔬 Science</div>
+              <div class="tag-selectable" data-val="Sports">⚽ Sports</div>
+              <div class="tag-selectable" data-val="Movies">🍿 Movies</div>
+              <div class="tag-selectable" data-val="Travel">✈️ Travel</div>
+              <div class="tag-selectable" data-val="Trekking">🥾 Trekking</div>
+            </div>
+          </div>
+
+          <!-- Skills tags -->
+          <div class="form-group">
+            <label class="form-label">Skills (Select 2 or more)</label>
+            <div class="tags-grid" id="skillsContainer">
+              <div class="tag-selectable" data-val="Programming">Programming</div>
+              <div class="tag-selectable" data-val="Web Development">Web Dev</div>
+              <div class="tag-selectable" data-val="Graphic Design">Graphic Design</div>
+              <div class="tag-selectable" data-val="Video Editing">Video Editing</div>
+              <div class="tag-selectable" data-val="Content Writing">Writing</div>
+              <div class="tag-selectable" data-val="Public Speaking">Public Speaking</div>
+              <div class="tag-selectable" data-val="UI/UX Design">UI/UX Design</div>
+              <div class="tag-selectable" data-val="Photography Editing">Photo Edit</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Navigation buttons -->
+        <div class="step-buttons">
+          <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Back</button>
+          <button type="button" class="btn btn-primary" id="nextBtn" style="margin-left: auto;">Next</button>
+          <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none; margin-left: auto;">Submit Profile</button>
+        </div>
+      </form>
+
+      <div class="auth-divider" style="margin-top: 24px;">or</div>
+
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

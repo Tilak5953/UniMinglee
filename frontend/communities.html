@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'dark';
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-theme');
+      } else {
+        document.documentElement.classList.remove('light-theme');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover and join interest-based student communities at UniMinglee.">
+  <title>Communities | UniMinglee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/communities.css">
+</head>
+<body>
+  <!-- App Navbar -->
+  <nav class="app-navbar">
+    <div class="navbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      <a href="dashboard.html" class="navbar-brand">Uni<span class="highlight">Minglee</span></a>
+    </div>
+    <div class="navbar-center">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="searchBarInput" placeholder="Search communities by name or tag...">
+      </div>
+    </div>
+    <div class="navbar-right">
+      <div class="navbar-user" id="navbarUser">
+        <div class="avatar avatar-sm" id="navAvatar"></div>
+        <span class="navbar-username" id="navUsername"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-link">
+        <span class="icon">📊</span> Dashboard
+      </a>
+      <a href="profile.html" class="sidebar-link">
+        <span class="icon">👤</span> Profile
+      </a>
+      <a href="communities.html" class="sidebar-link active">
+        <span class="icon">👥</span> Communities
+      </a>
+      <a href="events.html" class="sidebar-link">
+        <span class="icon">📅</span> Events
+      </a>
+      <a href="matching.html" class="sidebar-link">
+        <span class="icon">💫</span> Matching
+      </a>
+      <a href="chat.html" class="sidebar-link">
+        <span class="icon">💬</span> Chat
+      </a>
+      <div class="sidebar-divider"></div>
+      <a href="#" class="sidebar-link" id="logoutBtn">
+        <span class="icon">🚪</span> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="communities-header">
+      <div>
+        <h1>Campus Communities</h1>
+        <p>Find your tribe. Join student groups based on hobbies and creative pursuits.</p>
+      </div>
+      <button class="btn btn-primary" id="openCreateModalBtn">＋ Create Community</button>
+    </div>
+
+    <!-- Category filters -->
+    <div class="filter-scroll-container">
+      <div class="filter-pills" id="categoryFilterContainer">
+        <button class="filter-pill active" data-category="all">All Groups</button>
+        <button class="filter-pill" data-category="coding">Coding & Tech</button>
+        <button class="filter-pill" data-category="music">Music</button>
+        <button class="filter-pill" data-category="photography">Photography</button>
+        <button class="filter-pill" data-category="anime">Anime & Manga</button>
+        <button class="filter-pill" data-category="sports">Sports & Outdoors</button>
+        <button class="filter-pill" data-category="art">Fine Art & Design</button>
+        <button class="filter-pill" data-category="gaming">Cozy Gaming</button>
+        <button class="filter-pill" data-category="literature">Literature & Books</button>
+        <button class="filter-pill" data-category="science">Science & Research</button>
+      </div>
+    </div>
+
+    <!-- Communities Grid -->
+    <div class="community-grid" id="communitiesGrid">
+      <!-- Skeletons loaded initially -->
+      <div class="community-card card skeleton-card">
+        <div class="skeleton skeleton-rect" style="height: 100px; border-radius: 12px 12px 0 0;"></div>
+        <div class="community-card-content">
+          <div class="skeleton skeleton-text" style="width: 50%; height: 18px; margin-bottom: 8px;"></div>
+          <div class="skeleton skeleton-text" style="width: 85%;"></div>
+          <div class="skeleton skeleton-text" style="width: 70%; margin-bottom: 20px;"></div>
+          <div class="skeleton skeleton-text" style="width: 40%;"></div>
+        </div>
+      </div>
+      <div class="community-card card skeleton-card">
+        <div class="skeleton skeleton-rect" style="height: 100px; border-radius: 12px 12px 0 0;"></div>
+        <div class="community-card-content">
+          <div class="skeleton skeleton-text" style="width: 55%; height: 18px; margin-bottom: 8px;"></div>
+          <div class="skeleton skeleton-text" style="width: 80%;"></div>
+          <div class="skeleton skeleton-text" style="width: 60%; margin-bottom: 20px;"></div>
+          <div class="skeleton skeleton-text" style="width: 45%;"></div>
+        </div>
+      </div>
+      <div class="community-card card skeleton-card">
+        <div class="skeleton skeleton-rect" style="height: 100px; border-radius: 12px 12px 0 0;"></div>
+        <div class="community-card-content">
+          <div class="skeleton skeleton-text" style="width: 48%; height: 18px; margin-bottom: 8px;"></div>
+          <div class="skeleton skeleton-text" style="width: 90%;"></div>
+          <div class="skeleton skeleton-text" style="width: 65%; margin-bottom: 20px;"></div>
+          <div class="skeleton skeleton-text" style="width: 35%;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Create Community Modal -->
+  <div class="modal-overlay" id="createCommunityModal" style="display: none;">
+    <div class="modal" style="max-width: 550px;">
+      <h3 style="margin-bottom: 6px; font-family: var(--font-heading);">Create a Community</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 24px;">Setup a student-led club representing a niche interest on your campus.</p>
+      
+      <form id="createCommunityForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="communityName">Community Name</label>
+          <input type="text" id="communityName" class="form-input" placeholder="e.g. BITS Classical Musicians" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="communityCategory">Category</label>
+          <select id="communityCategory" class="form-select form-input" required style="appearance: auto;">
+            <option value="">Select Category</option>
+            <option value="coding">Coding & Tech</option>
+            <option value="music">Music</option>
+            <option value="photography">Photography</option>
+            <option value="anime">Anime & Manga</option>
+            <option value="sports">Sports & Outdoors</option>
+            <option value="art">Fine Art & Design</option>
+            <option value="gaming">Cozy Gaming</option>
+            <option value="literature">Literature & Books</option>
+            <option value="science">Science & Research</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Choose Club Icon</label>
+          <div class="emoji-picker-container" id="emojiPicker">
+            <span class="emoji-option selected" data-val="💻">💻</span>
+            <span class="emoji-option" data-val="🎵">🎵</span>
+            <span class="emoji-option" data-val="📸">📸</span>
+            <span class="emoji-option" data-val="🎌">🎌</span>
+            <span class="emoji-option" data-val="⚽">⚽</span>
+            <span class="emoji-option" data-val="🎨">🎨</span>
+            <span class="emoji-option" data-val="🎮">🎮</span>
+            <span class="emoji-option" data-val="📚">📚</span>
+            <span class="emoji-option" data-val="🔬">🔬</span>
+            <span class="emoji-option" data-val="💡">💡</span>
+            <span class="emoji-option" data-val="🎯">🎯</span>
+            <span class="emoji-option" data-val="🎸">🎸</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="communityDesc">Description</label>
+          <textarea id="communityDesc" class="form-input form-textarea" placeholder="Describe your group's goals, meeting frequencies, and who is welcome to join..." required></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="btn btn-ghost" id="closeCreateModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveCommunityBtn">Create Club</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/communities.js"></script>
+</body>
+</html>

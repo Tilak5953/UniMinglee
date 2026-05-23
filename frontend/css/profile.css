@@ -1,0 +1,248 @@
+/* ==========================================
+   PROFILE HEADER
+   ========================================== */
+.profile-header-card {
+  padding: 0;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.profile-cover {
+  height: 200px;
+  background: var(--gradient-primary);
+  position: relative;
+}
+
+.edit-cover-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  border: 1px solid var(--border-glass);
+  font-size: 0.8rem;
+  padding: 8px 16px;
+}
+
+.edit-cover-btn:hover {
+  background: var(--bg-secondary);
+}
+
+.profile-avatar-row {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 32px 32px 32px;
+  margin-top: -48px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.profile-avatar-container {
+  position: relative;
+}
+
+.profile-avatar-edit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: white;
+  border: 2px solid var(--bg-modal);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-fast);
+}
+
+.profile-avatar-edit:hover {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.profile-name-info {
+  flex-grow: 1;
+}
+
+.profile-name {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.profile-uni {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+/* ==========================================
+   PERSONALITY CARD SELECTOR
+   ========================================== */
+.personality-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.personality-card {
+  border: 2px solid rgba(108, 99, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--bg-primary);
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.personality-card .icon {
+  font-size: 2rem;
+}
+
+.personality-card h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.personality-card p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.personality-card:hover {
+  border-color: var(--primary-light);
+  transform: translateY(-2px);
+}
+
+.personality-card.selected {
+  border-color: var(--primary);
+  background: rgba(108, 99, 255, 0.05);
+  box-shadow: var(--shadow-md);
+}
+
+.personality-card.selected h4 {
+  color: var(--primary);
+}
+
+/* Personality comfort badges */
+.comfort-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+}
+
+.comfort-badge.introvert { background-color: var(--primary); }
+.comfort-badge.ambivert { background-color: var(--secondary); }
+.comfort-badge.extrovert { background-color: var(--accent); }
+
+/* ==========================================
+   TAG EDITOR SECTION
+   ========================================== */
+.tag-editor {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  background: rgba(108, 99, 255, 0.02);
+  min-height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-content: flex-start;
+  margin-bottom: 12px;
+}
+
+.tag-editor-input-row {
+  display: flex;
+  gap: 12px;
+}
+
+.tag-editor-input-row .form-input {
+  flex-grow: 1;
+}
+
+.tag-editor .tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--bg-item);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.tag-pill .remove-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.tag-pill .remove-btn:hover {
+  color: var(--danger);
+}
+
+/* ==========================================
+   PROFILE ACTIONS
+   ========================================== */
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+@media (max-width: 768px) {
+  .profile-avatar-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: -64px;
+  }
+  
+  .personality-selector {
+    grid-template-columns: 1fr;
+  }
+}

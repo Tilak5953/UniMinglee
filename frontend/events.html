@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'dark';
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-theme');
+      } else {
+        document.documentElement.classList.remove('light-theme');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover, search, and register for student-led events at UniMinglee.">
+  <title>Events | UniMinglee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/events.css">
+</head>
+<body>
+  <!-- App Navbar -->
+  <nav class="app-navbar">
+    <div class="navbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      <a href="dashboard.html" class="navbar-brand">Uni<span class="highlight">Minglee</span></a>
+    </div>
+    <div class="navbar-center">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="searchEventInput" placeholder="Search events by title, venue, or category...">
+      </div>
+    </div>
+    <div class="navbar-right">
+      <div class="navbar-user" id="navbarUser">
+        <div class="avatar avatar-sm" id="navAvatar"></div>
+        <span class="navbar-username" id="navUsername"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-link">
+        <span class="icon">📊</span> Dashboard
+      </a>
+      <a href="profile.html" class="sidebar-link">
+        <span class="icon">👤</span> Profile
+      </a>
+      <a href="communities.html" class="sidebar-link">
+        <span class="icon">👥</span> Communities
+      </a>
+      <a href="events.html" class="sidebar-link active">
+        <span class="icon">📅</span> Events
+      </a>
+      <a href="matching.html" class="sidebar-link">
+        <span class="icon">💫</span> Matching
+      </a>
+      <a href="chat.html" class="sidebar-link">
+        <span class="icon">💬</span> Chat
+      </a>
+      <div class="sidebar-divider"></div>
+      <a href="#" class="sidebar-link" id="logoutBtn">
+        <span class="icon">🚪</span> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="events-header">
+      <div>
+        <h1>Campus Events</h1>
+        <p>Discover coding hackathons, art workshops, cozy jam nights, and anime screenings.</p>
+      </div>
+      <button class="btn btn-primary" id="openCreateEventModalBtn">＋ Host Event</button>
+    </div>
+
+    <!-- Search & Sort Filter row -->
+    <div class="events-search-row">
+      <select class="events-sort" id="eventsSortSelect">
+        <option value="upcoming">Soonest Upcoming</option>
+        <option value="saved">Bookmarked Only</option>
+        <option value="registered">Registered Only</option>
+      </select>
+    </div>
+
+    <!-- Category filter pills -->
+    <div class="filter-scroll-container">
+      <div class="filter-pills" id="categoryFilterContainer">
+        <button class="filter-pill active" data-category="all">All Events</button>
+        <button class="filter-pill" data-category="technical">Technical</button>
+        <button class="filter-pill" data-category="cultural">Cultural</button>
+        <button class="filter-pill" data-category="sports">Sports</button>
+        <button class="filter-pill" data-category="workshops">Workshops</button>
+        <button class="filter-pill" data-category="hackathons">Hackathons</button>
+      </div>
+    </div>
+
+    <!-- Events Grid -->
+    <div class="event-grid" id="eventsGrid">
+      <!-- Loading Skeletons -->
+      <div class="event-card card skeleton-card">
+        <div class="skeleton skeleton-rect" style="height: 160px; border-radius: 12px 12px 0 0;"></div>
+        <div class="event-card-content">
+          <div class="skeleton skeleton-text" style="width: 30%; margin-bottom: 8px;"></div>
+          <div class="skeleton skeleton-text" style="width: 70%; height: 18px; margin-bottom: 8px;"></div>
+          <div class="skeleton skeleton-text" style="width: 90%;"></div>
+          <div class="skeleton skeleton-text" style="width: 80%; margin-bottom: 20px;"></div>
+          <div class="skeleton skeleton-text" style="width: 40%;"></div>
+        </div>
+      </div>
+      <div class="event-card card skeleton-card">
+        <div class="skeleton skeleton-rect" style="height: 160px; border-radius: 12px 12px 0 0;"></div>
+        <div class="event-card-content">
+          <div class="skeleton skeleton-text" style="width: 25%; margin-bottom: 8px;"></div>
+          <div class="skeleton skeleton-text" style="width: 65%; height: 18px; margin-bottom: 8px;"></div>
+          <div class="skeleton skeleton-text" style="width: 85%;"></div>
+          <div class="skeleton skeleton-text" style="width: 75%; margin-bottom: 20px;"></div>
+          <div class="skeleton skeleton-text" style="width: 45%;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- Event Details Modal -->
+  <div class="modal-overlay" id="eventDetailsModal" style="display: none;">
+    <div class="modal" style="max-width: 650px; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+      <button class="modal-close" id="closeDetailsModalBtn" style="position: absolute; top: 16px; right: 20px; z-index: 10; color: white; background: rgba(0,0,0,0.4); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      
+      <!-- Event Modal Banner -->
+      <div id="detailEventBanner" style="height: 180px; position: relative; background: var(--gradient-primary); overflow: hidden; display: flex; align-items: flex-end; padding: 20px 24px;">
+        <img id="detailEventBannerImg" src="" alt="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none;">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%); z-index: 2;"></div>
+        <span id="detailEventCategory" class="tag" style="position: relative; z-index: 3; background: var(--bg-modal); color: var(--primary); margin-bottom: 0;">TECHNICAL</span>
+      </div>
+
+      <!-- Event Modal Body -->
+      <div style="padding: 24px 28px; overflow-y: auto; max-height: 70vh;">
+        <h2 id="detailEventTitle" style="font-family: var(--font-heading); font-weight: 800; font-size: 1.5rem; margin-bottom: 16px; color: var(--text-primary);">Event Title</h2>
+        
+        <!-- Details Metadata Badge Row -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; background: var(--bg-primary); padding: 14px 18px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.3rem;">📍</span>
+            <div>
+              <div style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Venue</div>
+              <div id="detailEventVenue" style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">Computer Lab 3</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.3rem;">🕒</span>
+            <div>
+              <div style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Date & Time</div>
+              <div id="detailEventDateTime" style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">Jun 3, 2026 at 5:03 PM</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description Section -->
+        <div style="margin-bottom: 24px;">
+          <h4 style="font-family: var(--font-heading); font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: var(--text-primary);">About this Event</h4>
+          <p id="detailEventDesc" style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; white-space: pre-line; margin: 0;">Event description...</p>
+        </div>
+
+        <!-- Organizer Section -->
+        <div style="margin-bottom: 24px;">
+          <h4 style="font-family: var(--font-heading); font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: var(--text-primary);">Organized By</h4>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-secondary);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div id="detailOrganizerAvatar"></div>
+              <div>
+                <div id="detailOrganizerName" style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">Tilak Kumar</div>
+                <div id="detailOrganizerEmail" style="font-size: 0.78rem; color: var(--text-secondary);">tilak@dtu.ac.in</div>
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="detailChatOrganizerBtn" style="padding: 6px 14px; font-size: 0.8rem; border-radius: var(--radius-full); height: 32px; display: inline-flex; align-items: center; gap: 6px;">
+              <span>💬</span> Chat
+            </button>
+          </div>
+        </div>
+
+        <!-- Registered Attendees Section -->
+        <div style="margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h4 style="font-family: var(--font-heading); font-weight: 700; font-size: 0.95rem; margin: 0; color: var(--text-primary);">Who's Attending</h4>
+            <span id="detailAttendanceCount" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);">0 / 30 attending</span>
+          </div>
+          <div class="progress-bar" style="margin-bottom: 16px; height: 6px;">
+            <div class="progress-fill" id="detailAttendanceProgress" style="width: 0%;"></div>
+          </div>
+          
+          <div id="detailAttendeesList" style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <!-- Avatars will be dynamically inserted here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div style="padding: 16px 28px; border-top: 1px solid var(--border-color); background: var(--bg-primary); display: flex; justify-content: flex-end; gap: 12px;">
+        <button class="btn btn-secondary" id="detailSaveBtn" style="border-radius: var(--radius-full); font-size: 0.88rem; padding: 10px 22px;">Bookmark 🤍</button>
+        <button class="btn btn-primary" id="detailRegisterBtn" style="border-radius: var(--radius-full); font-size: 0.88rem; padding: 10px 22px;">Register</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Event Modal -->
+  <div class="modal-overlay" id="createEventModal" style="display: none;">
+    <div class="modal" style="max-width: 550px;">
+      <h3 style="margin-bottom: 6px; font-family: var(--font-heading);">Host a Campus Event</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 24px;">Organize a relaxed study session, seminar, game night, or creative circle.</p>
+      
+      <form id="createEventForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="eventTitle">Event Title</label>
+          <input type="text" id="eventTitle" class="form-input" placeholder="e.g. Acoustic Jam & Tea Night" required>
+        </div>
+
+        <div class="grid-2" style="gap: 16px;">
+          <div class="form-group">
+            <label class="form-label" for="eventCategory">Category</label>
+            <select id="eventCategory" class="form-select form-input" required style="appearance: auto;">
+              <option value="">Select Category</option>
+              <option value="technical">Technical</option>
+              <option value="cultural">Cultural</option>
+              <option value="sports">Sports</option>
+              <option value="workshops">Workshops</option>
+              <option value="hackathons">Hackathons</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="eventMaxAttendees">Max Seats / Capacity</label>
+            <input type="number" id="eventMaxAttendees" class="form-input" min="5" value="30" required>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap: 16px;">
+          <div class="form-group">
+            <label class="form-label" for="eventDate">Date & Time</label>
+            <input type="datetime-local" id="eventDate" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="eventVenue">Venue / Location</label>
+            <input type="text" id="eventVenue" class="form-input" placeholder="e.g. Library Seminar Room B" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="eventDesc">Event Description</label>
+          <textarea id="eventDesc" class="form-input form-textarea" placeholder="Detail the event activities, food/drinks provided, and what attendees should bring..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="eventImageFile">Cover Image (Optional)</label>
+          <input type="file" id="eventImageFile" accept="image/*" class="form-input">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="btn btn-ghost" id="closeEventModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveEventBtn">Host Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/events.js"></script>
+</body>
+</html>

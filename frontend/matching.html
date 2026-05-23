@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'dark';
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-theme');
+      } else {
+        document.documentElement.classList.remove('light-theme');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover compatible student peers, manage requests, and chat with connected friends.">
+  <title>Matching | UniMinglee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/matching.css">
+  <style>
+    /* Tabs selector navigation */
+    .tabs-nav {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      border-bottom: 1.5px solid var(--border-color);
+      padding-bottom: 2px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      cursor: pointer;
+      padding: 12px 6px;
+      position: relative;
+      transition: color var(--transition-fast);
+    }
+    .tab-btn:hover {
+      color: var(--primary);
+    }
+    .tab-btn.active {
+      color: var(--primary);
+    }
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -3.5px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gradient-primary);
+      border-radius: var(--radius-full);
+    }
+    .badge-tab {
+      background: var(--accent);
+      color: white;
+      border-radius: var(--radius-full);
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      margin-left: 4px;
+      font-weight: 700;
+    }
+    .matching-view-pane {
+      display: none;
+    }
+    .matching-view-pane.active {
+      display: block;
+      animation: fadeIn var(--transition-base);
+    }
+  </style>
+</head>
+<body>
+  <!-- App Navbar -->
+  <nav class="app-navbar">
+    <div class="navbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      <a href="dashboard.html" class="navbar-brand">Uni<span class="highlight">Minglee</span></a>
+    </div>
+    <div class="navbar-center">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="searchStudentsInput" placeholder="Search matches by name, interest, or branch...">
+      </div>
+    </div>
+    <div class="navbar-right">
+      <div class="navbar-user" id="navbarUser">
+        <div class="avatar avatar-sm" id="navAvatar"></div>
+        <span class="navbar-username" id="navUsername"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-link">
+        <span class="icon">📊</span> Dashboard
+      </a>
+      <a href="profile.html" class="sidebar-link">
+        <span class="icon">👤</span> Profile
+      </a>
+      <a href="communities.html" class="sidebar-link">
+        <span class="icon">👥</span> Communities
+      </a>
+      <a href="events.html" class="sidebar-link">
+        <span class="icon">📅</span> Events
+      </a>
+      <a href="matching.html" class="sidebar-link active">
+        <span class="icon">💫</span> Matching
+      </a>
+      <a href="chat.html" class="sidebar-link">
+        <span class="icon">💬</span> Chat
+      </a>
+      <div class="sidebar-divider"></div>
+      <a href="#" class="sidebar-link" id="logoutBtn">
+        <span class="icon">🚪</span> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="matching-header">
+      <h1>Find Connections</h1>
+      <p>Discover study buddies, club members, and like-minded friends based on compatibility metrics.</p>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" data-target="paneSuggestions">Suggestions</button>
+      <button class="tab-btn" data-target="paneConnections">My Connections</button>
+      <button class="tab-btn" data-target="panePending">Requests <span class="badge-tab" id="pendingRequestsBadge" style="display: none;">0</span></button>
+    </div>
+
+    <!-- PANE 1: SUGGESTIONS -->
+    <section class="matching-view-pane active" id="paneSuggestions">
+      <h3 class="matching-section-title">Recommended for You</h3>
+      <div class="matching-grid" id="suggestionsGrid">
+        <!-- Suggestions Skeletons -->
+        <div class="match-card card skeleton-card">
+          <div class="skeleton skeleton-circle" style="width: 80px; height: 80px; margin-bottom: 16px;"></div>
+          <div class="skeleton skeleton-text" style="width: 60%; height: 18px; margin-bottom: 8px;"></div>
+          <div class="skeleton skeleton-text" style="width: 40%; margin-bottom: 4px;"></div>
+          <div class="skeleton skeleton-text" style="width: 50%; margin-bottom: 12px;"></div>
+          <div class="skeleton skeleton-text" style="width: 85%;"></div>
+          <div class="skeleton skeleton-text" style="width: 70%; margin-bottom: 20px;"></div>
+          <div class="skeleton skeleton-text" style="width: 100%; height: 36px; border-radius: var(--radius-full);"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE 2: CONNECTIONS -->
+    <section class="matching-view-pane" id="paneConnections">
+      <h3 class="matching-section-title">Active Connections</h3>
+      <div class="connections-grid" id="connectionsGrid">
+        <!-- Loading connections skeleton -->
+        <div class="connection-card card skeleton-card">
+          <div class="skeleton skeleton-circle" style="width: 48px; height: 48px;"></div>
+          <div class="connection-info">
+            <div class="skeleton skeleton-text" style="width: 40%; height: 16px; margin-bottom: 4px;"></div>
+            <div class="skeleton skeleton-text" style="width: 60%;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE 3: PENDING REQUESTS -->
+    <section class="matching-view-pane" id="panePending">
+      <h3 class="matching-section-title">Incoming Match Requests</h3>
+      <div class="connections-grid" id="pendingGrid">
+        <!-- Loading requests skeletons -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Profile Detail Modal for detailed review -->
+  <div class="modal-overlay" id="studentDetailModal" style="display: none;">
+    <div class="modal" style="max-width: 500px; padding: 0; overflow: hidden; border-radius: var(--radius-xl);">
+      <div class="modal-banner" id="modalBanner" style="height: 120px; background: var(--gradient-primary); position: relative;">
+        <button class="btn-icon" id="closeDetailModalBtn" style="position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.85); width: 30px; height: 30px; font-size: 0.8rem;">✕</button>
+      </div>
+      <div style="padding: 24px; text-align: center; margin-top: -50px; position: relative;">
+        <div id="modalAvatarWrap" style="margin-bottom: 12px;"></div>
+        <h3 id="modalName" style="font-family: var(--font-heading); margin-bottom: 2px;">Name Details</h3>
+        <p id="modalUni" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">University Details</p>
+        <p id="modalBranch" style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 12px;">Branch & Year</p>
+        
+        <div id="modalBadgeWrap" style="margin-bottom: 16px; display: flex; justify-content: center; gap: 8px;"></div>
+        
+        <div style="background: rgba(108, 99, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; text-align: left; margin-bottom: 20px;">
+          <h5 style="margin: 0 0 6px 0; color: var(--text-primary); font-size: 0.85rem;">Bio</h5>
+          <p id="modalBio" style="margin: 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">Bio paragraph...</p>
+        </div>
+
+        <div style="text-align: left; margin-bottom: 20px;">
+          <h5 style="margin: 0 0 8px 0; color: var(--text-primary); font-size: 0.85rem;">Interests</h5>
+          <div id="modalInterests" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+        </div>
+
+        <div style="text-align: left; margin-bottom: 24px;">
+          <h5 style="margin: 0 0 8px 0; color: var(--text-primary); font-size: 0.85rem;">Skills</h5>
+          <div id="modalSkills" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+        </div>
+
+        <div id="modalActionWrap" style="width: 100%;">
+          <button class="btn btn-primary" id="modalConnectBtn" style="width: 100%;">Connect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/matching.js"></script>
+</body>
+</html>

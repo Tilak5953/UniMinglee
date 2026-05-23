@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'dark';
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-theme');
+      } else {
+        document.documentElement.classList.remove('light-theme');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Chat comfortably and privately with your connected campus friends.">
+  <title>Chat | UniMinglee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/chat.css">
+</head>
+<body>
+  <!-- App Navbar -->
+  <nav class="app-navbar">
+    <div class="navbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      <a href="dashboard.html" class="navbar-brand">Uni<span class="highlight">Minglee</span></a>
+    </div>
+    <div class="navbar-right">
+      <div class="navbar-user" id="navbarUser">
+        <div class="avatar avatar-sm" id="navAvatar"></div>
+        <span class="navbar-username" id="navUsername"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-link">
+        <span class="icon">📊</span> Dashboard
+      </a>
+      <a href="profile.html" class="sidebar-link">
+        <span class="icon">👤</span> Profile
+      </a>
+      <a href="communities.html" class="sidebar-link">
+        <span class="icon">👥</span> Communities
+      </a>
+      <a href="events.html" class="sidebar-link">
+        <span class="icon">📅</span> Events
+      </a>
+      <a href="matching.html" class="sidebar-link">
+        <span class="icon">💫</span> Matching
+      </a>
+      <a href="chat.html" class="sidebar-link active">
+        <span class="icon">💬</span> Chat
+      </a>
+      <div class="sidebar-divider"></div>
+      <a href="#" class="sidebar-link" id="logoutBtn">
+        <span class="icon">🚪</span> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="chat-layout" id="chatLayoutContainer">
+      
+      <!-- CHAT SIDEBAR -->
+      <aside class="chat-sidebar">
+        <div class="chat-sidebar-header">
+          <h2 class="chat-sidebar-title">Direct Messages</h2>
+          <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchChatUserInput" placeholder="Filter conversations...">
+          </div>
+        </div>
+        
+        <!-- Conversation Direct Message list -->
+        <div class="conversation-list" id="conversationList">
+          <!-- Loading skeletons -->
+          <div class="conversation-item skeleton-card">
+            <div class="skeleton skeleton-circle" style="width:40px;height:40px"></div>
+            <div class="conversation-info" style="flex:1">
+              <div class="skeleton skeleton-text" style="width:50%"></div>
+              <div class="skeleton skeleton-text" style="width:70%"></div>
+            </div>
+          </div>
+          <div class="conversation-item skeleton-card">
+            <div class="skeleton skeleton-circle" style="width:40px;height:40px"></div>
+            <div class="conversation-info" style="flex:1">
+              <div class="skeleton skeleton-text" style="width:60%"></div>
+              <div class="skeleton skeleton-text" style="width:65%"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CHAT MAIN THREAD -->
+      <section class="chat-main">
+        
+        <!-- Placeholder - No chat selected -->
+        <div class="no-chat-selected" id="noChatSelectedPane">
+          <div class="icon">💬</div>
+          <h3>Your Comfortable Chat Space</h3>
+          <p style="color: var(--text-secondary); max-width: 320px; font-size: 0.85rem; margin-top: 8px;">Select a connected classmate from the sidebar to start a relaxed direct message thread.</p>
+        </div>
+
+        <!-- Chat Header -->
+        <header class="chat-header">
+          <div class="chat-header-user">
+            <button class="chat-header-back-btn" id="chatBackBtn">←</button>
+            <div id="activeChatAvatarWrap"></div>
+            <div class="chat-header-info">
+              <span class="chat-header-name" id="activeChatName">Loading...</span>
+              <span class="chat-header-status" id="activeChatStatus">Offline</span>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="viewDetailProfileBtn" style="font-size: 0.8rem; padding: 6px 12px;">View Profile</button>
+        </header>
+
+        <!-- Message logs -->
+        <div class="chat-messages" id="chatMessages">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Send textbox controls -->
+        <div class="chat-input-area">
+          <button class="emoji-btn" id="emojiPanelToggle" type="button">😊</button>
+          
+          <!-- Emoji panel picker popover -->
+          <div class="emoji-panel" id="emojiPanel">
+            <span class="emoji-item">👋</span>
+            <span class="emoji-item">✨</span>
+            <span class="emoji-item">☕</span>
+            <span class="emoji-item">📚</span>
+            <span class="emoji-item">💻</span>
+            <span class="emoji-item">🎓</span>
+            <span class="emoji-item">🎮</span>
+            <span class="emoji-item">🎨</span>
+            <span class="emoji-item">🌙</span>
+            <span class="emoji-item">☀️</span>
+          </div>
+
+          <form class="chat-input-form" id="chatInputForm" autocomplete="off">
+            <input type="text" class="chat-textbox" id="messageTextBox" placeholder="Send a message comfortable to write..." required>
+            <button type="submit" class="btn btn-primary" id="sendMessageBtn" style="padding: 10px 24px; font-size: 0.85rem;">Send</button>
+          </form>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>

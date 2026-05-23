@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+/* --- Design Tokens --- */
+:root {
+  --primary: #6C63FF;
+  --primary-light: #8B83FF;
+  --primary-dark: #5A52E0;
+  --secondary: #48CAE4;
+  --secondary-light: #76D7EA;
+  --accent: #FF6B9D;
+  --accent-light: #FF8FB3;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+
+  /* Default theme properties (Eye-friendly Dark Mode) */
+  --bg-primary: #090911;
+  --bg-secondary: #121224;
+  --bg-card: rgba(20, 20, 36, 0.65);
+  --bg-glass: rgba(20, 20, 36, 0.45);
+  --bg-modal: #1B1B30;
+  --bg-input: rgba(108, 99, 255, 0.08);
+  --bg-input-focus: #14142B;
+  --bg-item: #1E1E38;
+  --bg-toast: rgba(20, 20, 36, 0.95);
+
+  --text-primary: #F3F4F6;
+  --text-secondary: #A0A0B0;
+  --text-light: #6B7280;
+  --border-color: rgba(108, 99, 255, 0.18);
+  --border-glass: rgba(255, 255, 255, 0.06);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.6);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --gradient-primary: linear-gradient(135deg, #6C63FF 0%, #48CAE4 100%);
+  --gradient-accent: linear-gradient(135deg, #FF6B9D 0%, #FF8FB3 100%);
+  --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  --navbar-height: 64px;
+  --sidebar-width: 260px;
+}
+
+/* --- Soothing Light Mode overrides --- */
+:root.light-theme, body.light-theme {
+  --bg-primary: #F6F8FC;
+  --bg-secondary: #EDEFFC;
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --bg-glass: rgba(255, 255, 255, 0.65);
+  --bg-modal: #FFFFFF;
+  --bg-input: rgba(108, 99, 255, 0.04);
+  --bg-input-focus: #FFFFFF;
+  --bg-item: #FFFFFF;
+  --bg-toast: rgba(255, 255, 255, 0.95);
+
+  --text-primary: #1F1F35;
+  --text-secondary: #6B7280;
+  --text-light: #9CA3AF;
+  --border-color: rgba(108, 99, 255, 0.12);
+  --border-glass: rgba(255, 255, 255, 0.5);
+
+  --shadow-sm: 0 2px 8px rgba(108, 99, 255, 0.06);
+  --shadow-md: 0 8px 24px rgba(108, 99, 255, 0.1);
+  --shadow-lg: 0 16px 48px rgba(108, 99, 255, 0.14);
+  --shadow-xl: 0 24px 64px rgba(108, 99, 255, 0.18);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base);
+}
+
+/* --- Typography --- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1rem; }
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* --- Layout Utilities --- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* --- Scrollbars --- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-light);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* --- Selections --- */
+::selection {
+  background-color: var(--primary-light);
+  color: white;
+}
+
+/* --- Animation Keyframes --- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition-base) forwards;
+}
+
+.slide-up {
+  animation: slideUp var(--transition-base) forwards;
+}

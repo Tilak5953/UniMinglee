@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'dark';
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-theme');
+      } else {
+        document.documentElement.classList.remove('light-theme');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage your UniMinglee student profile, personality type, and interests.">
+  <title>Edit Profile | UniMinglee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+  <!-- App Navbar -->
+  <nav class="app-navbar">
+    <div class="navbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      <a href="dashboard.html" class="navbar-brand">Uni<span class="highlight">Minglee</span></a>
+    </div>
+    <div class="navbar-right">
+      <div class="navbar-user" id="navbarUser">
+        <div class="avatar avatar-sm" id="navAvatar"></div>
+        <span class="navbar-username" id="navUsername"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-link">
+        <span class="icon">📊</span> Dashboard
+      </a>
+      <a href="profile.html" class="sidebar-link active">
+        <span class="icon">👤</span> Profile
+      </a>
+      <a href="communities.html" class="sidebar-link">
+        <span class="icon">👥</span> Communities
+      </a>
+      <a href="events.html" class="sidebar-link">
+        <span class="icon">📅</span> Events
+      </a>
+      <a href="matching.html" class="sidebar-link">
+        <span class="icon">💫</span> Matching
+      </a>
+      <a href="chat.html" class="sidebar-link">
+        <span class="icon">💬</span> Chat
+      </a>
+      <div class="sidebar-divider"></div>
+      <a href="#" class="sidebar-link" id="logoutBtn">
+        <span class="icon">🚪</span> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <section class="profile-header-card card">
+      <div class="profile-cover"></div>
+      <div class="profile-avatar-row">
+        <div class="profile-avatar-container">
+          <div id="profileAvatarBig"></div>
+          <button class="profile-avatar-edit" id="avatarEditBtn" title="Upload profile photo">📷</button>
+          <input type="file" id="avatarFileInput" accept="image/*" style="display: none;">
+        </div>
+        <div class="profile-name-info">
+          <h2 class="profile-name" id="profileDisplayName">Loading student...</h2>
+          <div class="profile-uni" id="profileDisplayUni">School loading...</div>
+          <div class="profile-badges" id="profileBadges">
+            <!-- Dynamic personality badge -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="card" style="padding: 32px;">
+      <h3 style="margin-bottom: 24px; font-family: var(--font-heading);">Account Details</h3>
+      <form id="profileForm" novalidate>
+        <div class="grid-2" style="gap: 20px;">
+          <div class="form-group">
+            <label class="form-label" for="nameInput">Full Name</label>
+            <input type="text" id="nameInput" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="universityInput">University</label>
+            <input type="text" id="universityInput" class="form-input" required readonly style="background-color: var(--bg-secondary); cursor: not-allowed;" title="University cannot be changed.">
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap: 20px;">
+          <div class="form-group">
+            <label class="form-label" for="branchInput">Branch of Study</label>
+            <input type="text" id="branchInput" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="yearInput">Year of Study</label>
+            <select id="yearInput" class="form-select form-input" required style="appearance: auto;">
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+              <option value="5th Year">5th Year</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="bioInput">About Me (Bio)</label>
+          <textarea id="bioInput" class="form-input form-textarea" placeholder="Tell other students about your interests, study methods, or what makes you comfortable..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Personality Alignment</label>
+          <div class="personality-selector">
+            <div class="personality-card" data-type="introvert" id="personality-introvert">
+              <span class="icon">🌙</span>
+              <h4>Introvert</h4>
+              <p>Thrives in quiet, one-on-one setup or low-stress discussions.</p>
+            </div>
+            <div class="personality-card" data-type="ambivert" id="personality-ambivert">
+              <span class="icon">⚡</span>
+              <h4>Ambivert</h4>
+              <p>Balances quiet study sessions with larger creative settings.</p>
+            </div>
+            <div class="personality-card" data-type="extrovert" id="personality-extrovert">
+              <span class="icon">☀️</span>
+              <h4>Extrovert</h4>
+              <p>Draws energy from busy campus groups and huge mixers.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tag cloud edit systems -->
+        <div class="form-group">
+          <label class="form-label">My Interests</label>
+          <div class="tag-editor" id="interestsEditor"></div>
+          <div class="tag-editor-input-row">
+            <input type="text" id="interestTextInput" class="form-input" placeholder="Add an interest (e.g. Hiking, Jazz)">
+            <button type="button" class="btn btn-secondary" id="addInterestBtn">Add</button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 24px;">
+          <label class="form-label">My Skills</label>
+          <div class="tag-editor" id="skillsEditor"></div>
+          <div class="tag-editor-input-row">
+            <input type="text" id="skillTextInput" class="form-input" placeholder="Add a skill (e.g. Python, Adobe XD)">
+            <button type="button" class="btn btn-secondary" id="addSkillBtn">Add</button>
+          </div>
+        </div>
+
+        <!-- Submit & Delete options -->
+        <div class="profile-actions">
+          <button type="button" class="btn btn-secondary" id="deleteAccountBtn" style="border-color: var(--danger); color: var(--danger);">Delete Account</button>
+          <button type="submit" class="btn btn-primary" id="saveProfileBtn">Save Profile Changes</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deleteModal" style="display: none;">
+    <div class="modal">
+      <h3 style="color: var(--danger); margin-bottom: 12px; font-family: var(--font-heading);">Delete Account Permanently?</h3>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 24px;">This action cannot be undone. All your matches, chat logs, registrations, and communities memberships will be deleted forever.</p>
+      <div style="display: flex; justify-content: flex-end; gap: 12px;">
+        <button class="btn btn-ghost" id="cancelDeleteBtn">Cancel</button>
+        <button class="btn btn-primary" id="confirmDeleteBtn" style="background: var(--danger);">Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'dark';
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-theme');
+      } else {
+        document.documentElement.classList.remove('light-theme');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sign in to your UniMinglee account and reconnect with your campus community.">
+  <title>Login | UniMinglee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+  <!-- Background Elements -->
+  <div class="blob blob-1" style="width: 250px; height: 250px; top: -50px; left: -50px; background: var(--primary-light); opacity: 0.3; filter: blur(50px); position: absolute; z-index: 1;"></div>
+  <div class="blob blob-2" style="width: 300px; height: 300px; bottom: -80px; right: -80px; background: var(--secondary-light); opacity: 0.3; filter: blur(50px); position: absolute; z-index: 1;"></div>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <a href="index.html">Uni<span>Minglee</span></a>
+      </div>
+      <div class="auth-header">
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Reconnect with your campus communities</p>
+      </div>
+
+      <form class="auth-form" id="loginForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">Campus Email</label>
+          <input type="email" id="email" class="form-input" placeholder="you@university.edu" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="input-password-container">
+            <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+            <button type="button" class="password-toggle" id="passwordToggle">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-options">
+          <label class="form-checkbox-container" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="rememberMe" style="width: 16px; height: 16px; accent-color: var(--primary);">
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="forgot-password" id="forgotPasswordBtn">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary auth-btn" id="submitBtn">Sign In</button>
+      </form>
+
+      <div class="auth-divider">or</div>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="signup.html">Create an Account</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
